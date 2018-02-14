@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<body>
+
+		<h1 style="background-color:Tomato;">Raspberry Pi Node.JS</h1>
+		<h1 style="color:DodgerBlue;">Control LED</h1>
+
+		<h2><p id="led1" >LED1 OFF</p> <input type="checkbox" id="light"> </h2>
+		
+		<p id="control" > </p>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- include socket.io client side script -->
+
+		<script>
+			var socket = io();//load socket.io-client and connect to the host that serves the page
+			window.addEventListener("load", function(){ 		//when page loads
+			  var lightbox = document.getElementById("light"); 
+			  lightbox.addEventListener("change", function() { 	//add event listener for when checkbox changes
+			    socket.emit("light", Number(this.checked)); 	//send button status to server (as 1 or 0)
+			  });
+			});
+
+			socket.on('light', function (data) { 				//get button status from client
+
+			  var element = document.getElementById("led1");
+
+			  document.getElementById("light").checked = data; 	//change checkbox according to push button on Raspberry Pi
+			  socket.emit("light", data); //send push button status to back to server
+
+			  if(data == 0){
+			  	element.setAttribute("type", "color");
+			  	element.innerHTML = "LED1 OFF";
+			  }
+			  else{
+			  	element.setAttribute("type", "color");
+			  	element.innerHTML = "LED1 ON";
+			  }
+
+			});
+
+		</script>
+
+	</body>
+</html>
