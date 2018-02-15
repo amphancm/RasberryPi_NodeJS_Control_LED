@@ -24,8 +24,6 @@ function handler (req, res) { //create server
 
 io.sockets.on('connection', function (socket) {   // WebSocket Connection
   var lightvalue = 0;
-
-  socket.emit('led1', "TEST");
                                                   // static variable for current status
   pushButton.watch(function (err, value) {        // Watch for hardware interrupts on pushButton
     if (err) { //if an error
@@ -42,7 +40,6 @@ io.sockets.on('connection', function (socket) {   // WebSocket Connection
       LED.writeSync(lightvalue);                  // turn LED on or off
       console.log("lightvalue : " + lightvalue); 
       socket.emit('light', lightvalue);
-      socket.emit('led1', "TEST"+lightvalue);
     }
 
   });
